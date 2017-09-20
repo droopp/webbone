@@ -18,14 +18,12 @@ var v_b = ButtonView.extend({
 
     click:function(){
 
-    	if (o.get("login") != "admin" && o.get("passwd")!="admin123"){
+    	if (o.get("login") != "admin" || o.get("passwd")!="admin123"){
 
     		$("#d_v_button").notify("Bad login or passwd!","error")
     	}else{
 
-	
-
-			executeApp("kladr2")
+			executeApp("drop")
 
     	}
     }

@@ -2604,7 +2604,7 @@ function createProgress(){
 
 //check if already exist
 //if ($(".progressbar").length==0){	
-   $("#app").append("<div class='ui-widget-overlay' style='color: #cc0000;font-size: 50px;font-weight: 900; " +
+   $("#app").append("<div class='ui-widget-overlay' style='color: #000000;font-size: 50px;font-weight: 900; " +
     "font-family:Tahoma;z-index:9999;' id ='progressbar'></div>");
    
 };
@@ -5153,7 +5153,7 @@ var TabBoxView =  BaseView.extend({
 var TabRadioBoxView =  BaseView.extend({
 
           template: _.template(""+
-                          "<div id='d_<%=v.view_id%>' class='ui-accordion' style ='position:absolute; font-size:12px; top: <%=v.top_p%>px; left: <%=v.left_p%>px; width:<%=v.width_p%>px; height:<%=v.heigth_p%>px'>"+
+                          "<div id='d_<%=v.view_id%>' class='ui-accordion' style ='position:absolute; font-size:14px; top: <%=v.top_p%>px; left: <%=v.left_p%>px; width:<%=v.width_p%>px; height:<%=v.heigth_p%>px'>"+
                               "<div id='<%=v.view_id%>'>" +
                                         "<% for(var inputs in v.values){ %>" +
                                          "<input type='radio' id='<%=v.values[inputs] %>' name='radio'><label class='buttonsetb' target ='<%=v.values[inputs] %>'  for='<%=v.values[inputs] %>'><%=v.labels[inputs] %></label>" +
@@ -5174,7 +5174,7 @@ var TabRadioBoxView =  BaseView.extend({
             for (inputs in this.options.params.values){
             /*style='position:relative;float:left;'*/
 
-                  this.$("#d_" + this.options.params.view_id).append("<div class='p_tabs' style='position:relative;clear: left;float:left;'  id ='p_" + this.options.params.values[inputs] + "' ><p style='color:#cc0000;'>" + this.options.params.labels[inputs] + "</p><hr></div>");
+                  this.$("#d_" + this.options.params.view_id).append("<div class='p_tabs' style='position:relative;clear: left;float:left;'  id ='p_" + this.options.params.values[inputs] + "' ><p style='color:#000000;'>" + this.options.params.labels[inputs] + "</p><hr></div>");
 
                //hide other pages
                xi++;
@@ -7487,7 +7487,7 @@ app_settings["back_view"] = btn_settings;
 
            });
 
-           Render(new backView(back,"back_view"),"app");
+           //Render(new backView(back,"back_view"),"app");
 
          
 		   
