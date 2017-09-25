@@ -18,12 +18,18 @@ var v_b = ButtonView.extend({
 
     click:function(){
 
-    	if (o.get("login") != "admin" || o.get("passwd")!="admin123"){
+    	r = get2Mongo("/auth", {username:o.get("login") , 
+    							password:o.get("passwd")})
+
+
+    	if (r.status==401){
 
     		$("#d_v_button").notify("Bad login or passwd!","error")
     	}else{
-
-			executeApp("drop")
+ 			
+    		setCookie("access_token", r.responseJSON.access_token, {expires: 3600})	
+			location.hash="drop"
+			location.reload(true)
 
     	}
     }

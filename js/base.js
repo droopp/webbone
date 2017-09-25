@@ -714,6 +714,9 @@ var getAppSettings = function(o){
 		 if (app_settings==undefined){
 	      app_settings = get2Object(new Request("/settings/get",o));	  
 		 } 
+		 if (app_settings == undefined){
+		 	return false
+		 }
 		  
 		  app_settings_chache[AppName] = JSON.stringify(app_settings); 
 	}else
@@ -2653,7 +2656,7 @@ var LabelView =  BaseView.extend({
 
             template: _.template(""+
                                 "<div id='d_<%=v.view_id%>' style ='position:absolute; top: <%=v.top_p%>px; left: <%=v.left_p%>px; width:<%=v.width_p%>px; height:<%=v.heigth_p%>px;' styleclass='ui-widget-content'>"+
-                                 "<label> <font style = 'font-weight: <%=v.bold%>; color: <%=v.color%>; font-size:<%=v.size%>px '><%=m[v.value]%></font></label>"+
+                                 "<label> <font style = 'font-weight: <%=v.bold%>; color: <%=v.color%>;  font-size:<%=v.size%>px; background-color:<%=v.bgcolor%> '><%=m[v.value]%></font></label>"+
                                 "</div>"
                             ),
 
@@ -2720,6 +2723,12 @@ var LabelView =  BaseView.extend({
                                   id:"color"
                                  ,label:"color"
                                  ,value:this.options.params.color
+
+                                 }
+                               ,{
+                                  id:"bgcolor"
+                                 ,label:"bgcolor"
+                                 ,value:this.options.params.bgcolor
 
                                  }
 
@@ -5165,6 +5174,9 @@ var TabRadioBoxView =  BaseView.extend({
 
             UI: function() {
                     this.$("#" + this.options.params.view_id).buttonset();
+
+                     this.$("input").css({visibility:"hidden"});
+
                     
             //create pages..
             var xi = 0;
@@ -7221,6 +7233,9 @@ var entry_point;
 function executeApp(selected, modal, ok, deffered_call){
 
 
+	location.hash = selected
+
+
 	//open in new window
 	try{
 			if (modal=="false"){ //&& false){
@@ -7487,7 +7502,7 @@ app_settings["back_view"] = btn_settings;
 
            });
 
-           //Render(new backView(back,"back_view"),"app");
+           Render(new backView(back,"back_view"),"app");
 
          
 		   
@@ -7549,26 +7564,8 @@ var Menu2View =  BaseView.extend({
                                         " <% } %>" +
                               "</ul>" +
                            "</li>" +
-                           "<li class='has-sub'><span><<back</span>"+
-                              "<ul>"+
-                             "<% for(var inputs in v.values){ %>" +
-                                        "<li class='_target' id = '<%=v.values[inputs]%>'><span><%=v.labels[inputs] %></span></li>"+
-                                        " <% } %>" +
-                              "</ul>" +
-                           "</li>" +
-                               "<li class='has-sub'><span>go>></span>"+
-                              "<ul>"+
-                             "<% for(var inputs in v.values){ %>" +
-                                        "<li class='_target' id = '<%=v.values[inputs]%>'><span><%=v.labels[inputs] %></span></li>"+
-                                        " <% } %>" +
-                              "</ul>" +
-                           "</li>" +
-
 
                           "</ul>" +
-
-
-                      
                          "</div>"
             ),
 

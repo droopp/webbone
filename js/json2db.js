@@ -24,8 +24,6 @@ Response object
 function get2Object(o) {
 
 	//progressOn();
-
-
 	//add userid 
 	
 	try{
@@ -98,6 +96,9 @@ function get2Object(o) {
 	}
 
 	var jqXHR = $.ajax({
+						beforeSend: function (xhr) {
+    						xhr.setRequestHeader ("Authorization", "JWT " + getCookie("access_token"));
+						},
 						type:"POST",
 						url:conection_data.urlDb +  "/api/v1.0" + o.root.name,
 						data:xml2,
@@ -112,19 +113,27 @@ function get2Object(o) {
 						
 				    			
 			    		},
-						error:function(o){
-									 $.notify(o.root.name + ": " + JSON.stringify(o), "error");	
-							
+						error:function(res){
+							if (res.status!=401){
+									 $.notify("error: " + JSON.stringify(res), "error");	
+							}
 						}
-					}).responseText;
+					});
 					
 	if (v_async!=false){
 		return;
 		
 	}
 		
-					
-	var response = jqXHR;
+
+	if (jqXHR.status == 401){
+		location.hash = "login"
+		location.reload(true)	
+		return
+	}else{
+	  var response = jqXHR.responseText	
+	}
+	   
 
 	//progressOff();
 
@@ -378,6 +387,9 @@ function get2Script(o) {
 	var xml2 = json2xml({root:o.root});
 
 	var jqXHR = $.ajax({
+						beforeSend: function (xhr) {
+    						xhr.setRequestHeader ("Authorization", "JWT " + getCookie("access_token"));
+						},
 						type:"POST",
 						url:conection_data.urlDb + "/Soracle/Service?func=" + o.root.name,
 						data:xml2,
@@ -456,21 +468,59 @@ Response object
 			
 */
 
-function get2Mongo(o) {
+
+function getCookie(name) {
+  var matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+function setCookie(name, value, options) {
+  options = options || {};
+
+  var expires = options.expires;
+
+  if (typeof expires == "number" && expires) {
+    var d = new Date();
+    d.setTime(d.getTime() + expires * 1000);
+    expires = options.expires = d;
+  }
+  if (expires && expires.toUTCString) {
+    options.expires = expires.toUTCString();
+  }
+
+  value = encodeURIComponent(value);
+
+  var updatedCookie = name + "=" + value;
+
+  for (var propName in options) {
+    updatedCookie += "; " + propName;
+    var propValue = options[propName];
+    if (propValue !== true) {
+      updatedCookie += "=" + propValue;
+    }
+  }
+
+  document.cookie = updatedCookie;
+}
+
+
+function get2Mongo(p, o) {
 	
 	var jqXHR = $.ajax({
 						type:"POST",
-						url:conection_data.urlMongo + "/Smongo/Service",
+						url:conection_data.urlMongo + p,
 						data:JSON.stringify(o),
 						async:false,
 						contentType: "application/json; charset=utf-8",
 					    dataType: "json",
 						error:function(o){
 							
-								 $.notify(JSON.stringify(o), "error");	
+								 //$.notify(JSON.stringify(o), "error");	
 							
 						}
-					}).responseText;
+					});
 					
 
    			return jqXHR;

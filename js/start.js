@@ -14,33 +14,15 @@ if (EditEnable==0){
 
 //entry point
 
-if(typeof intiReq != 'object' ){ 		
+if(location.hash == ""){ 		
 
- intiReq = {func:"executeApp",
- 			params:{
-                		name:"login",
-                		id:"login"
- 			}}
+  location.hash="drop"
+  location.reload(true)
 
 
  }else{
-		location.hash = JSON.stringify(intiReq);
+		executeApp(location.hash.substring(1));
  }
-
-	if (location.hash!=""){
-		intiReq = JSON.parse(location.hash.substring(1));
-	}
-
-							if (intiReq.func =="openEntity"){
-								openEntity(intiReq.params);
-								
-							}else{ 
-							
-								//call with params
-									o = newAppObject(intiReq.params);	
-									addToAppRequest(o);			
-									executeApp(intiReq.params.name);
-							}
 	
 
 });
