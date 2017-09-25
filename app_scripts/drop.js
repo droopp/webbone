@@ -4,7 +4,7 @@ EditEnable=0
 if(getAppSettings("drop")){
 
 var o = newAppObject({
-					  text:"Drop!",
+					  text:"Cluster info",
 					  desc:"Distributed Reliable Operations Platform",
 					  title:"Cluster resources",
 					  logs:"State logs"
@@ -53,13 +53,13 @@ var nodet = newAppObject({
 
 // logo
 Render(new LabelView(o,"label"),"app")
-Render(new LabelView(o,"desc"),"app");
+//Render(new LabelView(o,"desc"),"app");
 
 //label dashboard
 Render(new LabelView(o,"title"),"app");
 
 //label logs
-Render(new LabelView(o,"logs"),"app");
+//Render(new LabelView(o,"logs"),"app");
 
 //common
 Render(new LabelView(nodes,"nodes"),"app");
@@ -68,13 +68,12 @@ Render(new LabelView(nodes,"ram"),"app");
 Render(new LabelView(nodes,"hdd"),"app");
 
 //logs
-Render(new MemoView(nodes,"memo2"),"app");
-
-
+//Render(new MemoView(nodes,"memo2"),"app");
 //node table
 Render(new GridView(nodet,"nodet"),"app");
 
 
+//Render(new PivotView(nodet,"pivot"),"app");
 
 
 
