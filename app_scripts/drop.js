@@ -4,10 +4,9 @@ EditEnable=0
 if(getAppSettings("drop")){
 
 var o = newAppObject({
-					  text:"Cluster info",
+					  text:"/nodes info",
 					  desc:"Distributed Reliable Operations Platform",
 					  title:"Cluster resources",
-					  logs:"State logs"
 					 });
 
 
@@ -15,8 +14,7 @@ var nodes = newAppObject({
                       nodes:"Nodes: 4",
 					  cpu:"CPU: 24",
 					  ram:"RAM: 120G",
-					  hdd:"HDD: 1T",
-					  memo2:"12:00:23...node@localhost down ..."
+					  hdd:"HDD: 1T"
 			})
 
 	
@@ -28,8 +26,24 @@ var nodet = newAppObject({
 		   {name:"node2@localhost", is_active:1, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
 		   {name:"node2@localhost", is_active:0, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
 		   {name:"node2@localhost", is_active:1, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
+		   {name:"node2@localhost", is_active:1, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
+		   {name:"node2@localhost", is_active:0, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
+		   {name:"node2@localhost", is_active:1, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
+		   {name:"node2@localhost", is_active:0, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
+		   {name:"node2@localhost", is_active:1, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
 		   {name:"node2@localhost", is_active:0, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 }
 
+	]
+
+})
+
+var node_log = newAppObject({
+	
+	nodes:[{name:"node1@localhost", date:"12.01.2016 12:23:33",msg:"node@localhost down ..." },
+	{name:"node1@localhost", date:"12.01.2016 12:23:33",msg:"node@localhost down ..." },
+	{name:"node1@localhost", date:"12.01.2016 12:23:33",msg:"node@localhost down ..." },
+	{name:"node1@localhost", date:"12.01.2016 12:23:33",msg:"node@localhost down ..." },
+	{name:"node1@localhost", date:"12.01.2016 12:23:33",msg:"node@localhost down ..." }
 	]
 
 })
@@ -42,8 +56,8 @@ var nodet = newAppObject({
      params:{
 			id:"app_menu",
 			view_id:"app_menu",
-			values:["nodes", "ppools", "flows", "images"],
-			labels:["nodes", "ppools", "flows", "images"]
+			values:["nodes", "ppools", "flows", "images", "settings"],
+			labels:["nodes", "ppools", "flows", "images", "settings"]
     	}
 	};
 
@@ -69,11 +83,15 @@ Render(new LabelView(nodes,"hdd"),"app");
 
 //logs
 //Render(new MemoView(nodes,"memo2"),"app");
+
+
 //node table
+Render(new GridView(nodet,"nodet2"),"app");
 Render(new GridView(nodet,"nodet"),"app");
 
+Render(new GridView(node_log,"node_log"),"app");
 
-//Render(new PivotView(nodet,"pivot"),"app");
+
 
 
 
