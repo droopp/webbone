@@ -1,12 +1,14 @@
 
+
 EditEnable=0
 
 if(getAppSettings("drop")){
 
 var o = newAppObject({
-					  text:"/nodes info",
+					  text:"nodes",
 					  desc:"Distributed Reliable Operations Platform",
 					  title:"Cluster resources",
+					  graph: ""
 					 });
 
 
@@ -86,7 +88,32 @@ Render(new LabelView(nodes,"hdd"),"app");
 
 
 //node table
-Render(new GridView(nodet,"nodet2"),"app");
+
+
+Render(new LabelView(o,"graph"),"app");
+
+
+
+
+
+$("#d_graph").append("<img src='/rrd/drop--node_node1.png?'></img>")
+$("#d_graph").append("<img src='/rrd/drop--ppool_node_collector-0.1.0.png?'></img>")
+
+		setInterval(function(){
+
+				$("#d_graph img").each(function(index){
+					file = $(this)[0].src.split("/")[4]
+					file = file.substr(0,file.indexOf("?"))
+					$(this)[0].src = 'rrd/'+file+'?rand=' + Math.random(); 
+				})
+				
+
+		}, 4000);
+
+
+//set
+
+//Render(new GridView(nodet,"nodet2"),"app");
 Render(new GridView(nodet,"nodet"),"app");
 
 Render(new GridView(node_log,"node_log"),"app");
