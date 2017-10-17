@@ -22,36 +22,33 @@ var nodes = newAppObject({
 	
 var nodet = newAppObject({
 	
-	nodes:[{name:"node1@localhost", is_active:1, cpu:2, cpu_percent:0.50, ram:200, ram_percent:0.4 },
-		   {name:"node2@localhost", is_active:1, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
-		   {name:"node2@localhost", is_active:0, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
-		   {name:"node2@localhost", is_active:1, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
-		   {name:"node2@localhost", is_active:0, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
-		   {name:"node2@localhost", is_active:1, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
-		   {name:"node2@localhost", is_active:1, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
-		   {name:"node2@localhost", is_active:0, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
-		   {name:"node2@localhost", is_active:1, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
-		   {name:"node2@localhost", is_active:0, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
-		   {name:"node2@localhost", is_active:1, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 },
-		   {name:"node2@localhost", is_active:0, cpu:4, cpu_percent:0.20, ram:2100, ram_percent:0.5 }
-
-	]
+	nodes:[]
 
 })
+
+
+
+nodet.set("nodes", get2Object(new Request("/stat/node_stat", {})).node_stat.row)
+
 
 var node_log = newAppObject({
-	
-	nodes:[{name:"node1@localhost", date:"12.01.2016 12:23:33",msg:"node@localhost down ..." },
-	{name:"node1@localhost", date:"12.01.2016 12:23:33",msg:"node@localhost down ..." },
-	{name:"node1@localhost", date:"12.01.2016 12:23:33",msg:"node@localhost down ..." },
-	{name:"node1@localhost", date:"12.01.2016 12:23:33",msg:"node@localhost down ..." },
-	{name:"node1@localhost", date:"12.01.2016 12:23:33",msg:"node@localhost down ..." }
-	]
-
+	nodes:[]
 })
 
+node_log.set("nodes", get2Object(new Request("/stat/node_list", {})).node_list.row)
 	
+	/*setInterval(function(){
+		node_log.set("nodes", get2Object(new Request("/stat/node_list", {})).node_list.row)
+		
+		if ($("#d_tmp_node_log .ui-icon-circle-triangle-s").length==1){
+			Render(new GridView(node_log,"node_log"),"app");	
+		}else{
+			Render(new GridView(node_log,"node_log"),"app");	
+			$("#d_tmp_node_log .ui-icon-circle-triangle-s").click()
 
+		}
+		}, 4000);
+	*/
 
    var menu = newAppObject({});
 	var app_menu = {
@@ -99,7 +96,7 @@ Render(new LabelView(o,"graph"),"app");
 $("#d_graph").append("<img src='/rrd/drop--node_node1.png?'></img>")
 $("#d_graph").append("<img src='/rrd/drop--ppool_node_collector-0.1.0.png?'></img>")
 
-		setInterval(function(){
+/*		setInterval(function(){
 
 				$("#d_graph img").each(function(index){
 					file = $(this)[0].src.split("/")[4]
@@ -109,7 +106,7 @@ $("#d_graph").append("<img src='/rrd/drop--ppool_node_collector-0.1.0.png?'></im
 				
 
 		}, 4000);
-
+*/
 
 //set
 

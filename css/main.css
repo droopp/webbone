@@ -140,7 +140,7 @@ body .ui-tooltip{border-width:2px}
 .ui-widget{font-family:Arial,sans-serif;font-size:1.1em}
 .ui-widget .ui-widget{font-size:1em}
 .ui-widget input,.ui-widget select,.ui-widget textarea,.ui-widget button{font-family:Arial,sans-serif;font-size:1em}
-.ui-widget-content{border:1px solid #eee;background: #eaeaea;color:#333;}
+.ui-widget-content{border:1px solid #eee;background: #eaeaea;color: #212121;}
 .ui-widget-content a{color:#333}
 .ui-widget-header{/* border: 1px solid #777777; *//* background:#111 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAABkEAIAAACY3hF0AAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAgElEQVQoz+WQMQqDQBREZ38jWNiKt8gN/mkiOad22TWQdG6XKwhCQPClMIHgCYRUjxmYGRjdL3VZlyZJ0t/gRSabRrnclHHcGHHc9KChMV2ZmHagI5FM/YZujWs0bSY9ka/S7VwsxbLPfcp+FzScwhxmDRaqUBlPWlqldISXDo43zXRgobKb0oMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTQtMDEtMTJUMTg6NTY6MDktMDg6MDDMDMKIAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE0LTAxLTEyVDE4OjU2OjA5LTA4OjAwvVF6NAAAAABJRU5ErkJggg==) 50% 50% repeat-x; */color:#fff;font-weight:700;}
 .ui-widget-header a{color:#fff}

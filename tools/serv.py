@@ -2,10 +2,12 @@ from lxml import etree as et
 from flask import request
 
 import sqlite3
+import os
 
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
 from datetime import timedelta
+
 
 class User(object):
     def __init__(self, id, username, password):
@@ -19,6 +21,8 @@ class User(object):
 users = [
     User(1, 'admin', 'admin123'),
 ]
+
+DB_NAME = os.environ["DB_NAME"]
 
 username_table = {u.username: u for u in users}
 userid_table = {u.id: u for u in users}
@@ -42,9 +46,63 @@ app.debug = False
 app.config['SECRET_KEY'] = 'super-secret'
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(60)
 
-
-
 jwt = JWT(app, authenticate, identity)
+
+
+@app.route("/api/v1.0/stat/node_stat",  methods=['POST'])
+def node_stat():
+    con = sqlite3.connect(DB_NAME)
+
+    cur = con.cursor()
+
+    cur.execute("""select s.node, l.active, s.cpu_count, s.ram_count,
+                 s.disk_count, MAX(s.date), MAX(l.date), AVG(s.cpu_percent),
+                 AVG(s.ram_percent), AVG(s.disk_percent),
+                 AVG(s.net_count)
+                   from node_stat s, node_list l where s.node=l.node""")
+
+    res = "<root><node_stat>"
+    for row in cur:
+        res += """<row>
+                    <name>{}</name>
+                    <is_active>{}</is_active>
+                    <cpu>{}</cpu>
+                    <ram>{}</ram>
+                    <disk>{}</disk>
+                    <date>{}</date>
+                    <date_status>{}</date_status>
+                    <cpu_percent>{:2.1f}</cpu_percent>
+                    <ram_percent>{:2.1f}</ram_percent>
+                    <disk_percent>{:2.1f}</disk_percent>
+                    <net_count>{:2.1f}</net_count>
+                 </row>""".format(row[0], row[1], row[2], row[3], row[4], row[5],
+                                  row[6], row[7], row[8], row[9], row[10])
+
+    con.close()
+
+    return res + '</node_stat></root>', 200
+
+
+@app.route("/api/v1.0/stat/node_list",  methods=['POST'])
+def node_list():
+    con = sqlite3.connect(DB_NAME)
+
+    cur = con.cursor()
+
+    cur.execute('select * from node_list')
+
+    res = "<root><node_list>"
+    for row in cur:
+        res += """<row>
+                    <name>{}</name>
+                    <active>{}</active>
+                    <date>{}</date>
+                    <msg>{}</msg>
+                 </row>""".format(row[0], row[1], row[2], row[3])
+
+    con.close()
+
+    return res + '</node_list></root>', 200
 
 
 @app.route("/api/v1.0/settings/save",  methods=['POST'])
