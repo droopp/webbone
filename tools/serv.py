@@ -56,13 +56,20 @@ def node_stat():
     cur = con.cursor()
 
     cur.execute("""select s.node, l.active, s.cpu_count, s.ram_count,
-                 s.disk_count, MAX(s.date), MAX(l.date), AVG(s.cpu_percent),
-                 AVG(s.ram_percent), AVG(s.disk_percent),
-                 AVG(s.net_count)
-                   from node_stat s, node_list l where s.node=l.node""")
+                         s.disk_count, MAX(s.date), AVG(s.cpu_percent),
+                         AVG(s.ram_percent), AVG(s.disk_percent), AVG(s.net_count)
+                         from node_stat s left join (select node, active, MAX(date) from node_list) l
+                          on s.node = l.node
+                         group by s.node
+                """)
 
     res = "<root><node_stat>"
     for row in cur:
+
+        if row[1] == 0:
+            continue
+
+        print(row)
         res += """<row>
                     <name>{}</name>
                     <is_active>{}</is_active>
@@ -70,13 +77,12 @@ def node_stat():
                     <ram>{}</ram>
                     <disk>{}</disk>
                     <date>{}</date>
-                    <date_status>{}</date_status>
                     <cpu_percent>{:2.1f}</cpu_percent>
                     <ram_percent>{:2.1f}</ram_percent>
                     <disk_percent>{:2.1f}</disk_percent>
                     <net_count>{:2.1f}</net_count>
                  </row>""".format(row[0], row[1], row[2], row[3], row[4], row[5],
-                                  row[6], row[7], row[8], row[9], row[10])
+                                  row[6], row[7], row[8], row[9])
 
     con.close()
 

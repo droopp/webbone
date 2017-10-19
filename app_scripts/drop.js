@@ -41,9 +41,8 @@ node_log.set("nodes", get2Object(new Request("/stat/node_list", {})).node_list.r
 		node_log.set("nodes", get2Object(new Request("/stat/node_list", {})).node_list.row)
 		
 		if ($("#d_tmp_node_log .ui-icon-circle-triangle-s").length==1){
-			Render(new GridView(node_log,"node_log"),"app");	
+	
 		}else{
-			Render(new GridView(node_log,"node_log"),"app");	
 			$("#d_tmp_node_log .ui-icon-circle-triangle-s").click()
 
 		}
