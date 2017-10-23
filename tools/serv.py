@@ -60,6 +60,7 @@ def node_stat():
                          AVG(s.ram_percent), AVG(s.disk_percent), AVG(s.net_count)
                          from node_stat s left join (select node, active, MAX(date) from node_list) l
                           on s.node = l.node
+                         where s.date > DATETIME('NOW', '-1 minutes')
                          group by s.node
                 """)
 
