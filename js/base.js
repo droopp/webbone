@@ -7502,7 +7502,7 @@ app_settings["back_view"] = btn_settings;
 
            });
 
-           Render(new backView(back,"back_view"),"app");
+         //  Render(new backView(back,"back_view"),"app");
 
          
 		   

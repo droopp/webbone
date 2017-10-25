@@ -2,31 +2,10 @@
 
 EditEnable=0
 
-if(getAppSettings("drop")){
+if(getAppSettings("ppools")){
 
-window.clearInterval(id); // will do nothing if no timeout with id is present
+//window.clearInterval(id); // will do nothing if no timeout with id is present
 
-
-function mark_table(arr){
-
-  for (i in arr){
- 	
- 	$("#d_'"+ arr[i] +" font']").each
- 		(function(e){d = $(this).text(); 
- 			if (d>30 && d<50){ 
- 					$(this).css("background", "red") 
- 			} 
- 			if (d>=50 && d<70){ 
- 					$(this).css("background", "red") 
- 			} 
- 			if (d>=70){ 
- 					$(this).css("background", "red") 
- 			} 
-
- 			 
- 		 })
-  }
-}
 
 //menu
    var menu = newAppObject({});
@@ -42,16 +21,16 @@ function mark_table(arr){
 	app_settings["app_menu"] = app_menu;	
 
 var o = newAppObject({
-					  text:"nodes",
+					  text:"ppools",
 					  desc:"Distributed Reliable Operations Platform",
-					  title:"Cluster resources",
+					  title:"Ppools resources",
 					  title2:"Used",
 					  graph: ""
 					 });
 
 
 var nodes = newAppObject({
-                      nodes:"Nodes: 0",
+                      nodes:"Workers: 0",
 					  cpu:"CPU: 0",
 					  ram:"RAM: 0",
 					  hdd:"HDD: 0",
@@ -114,7 +93,7 @@ nd.forEach(function(e){
 
 
 
-nodes.set({nodes:"Nodes: " + common.nodes,
+nodes.set({nodes:"Workers: " + common.nodes,
 		   cpu:"CPU: " + common.cpu,
 		   ram:"RAM: " + Math.round(common.ram/1024) + "G",
 		   hdd:"HDD: " + Math.round(common.hdd/1024) + "G",
@@ -152,7 +131,7 @@ if (!$.isArray(nd)){
 
 
 nd.forEach(function(e){ 
-	$("#d_graph").append("<img src='/rrd/drop--node_" + e.name + ".png?rand=" + Math.random() + "'></img>")
+	$("#d_graph").append("<img src='/rrd/drop--ppool_" + e.name + ".png?rand=" + Math.random() + "'></img>")
 
 });
 
@@ -196,42 +175,6 @@ Render(new GridView(node_log,"node_log"),"app");
 update_common()
 update_graph()
 
-
-var id = window.setInterval(function(){
-
-
-  v_log=false
-  v_nt=false
-
-  if ($("#d_tmp_node_log .ui-icon-circle-triangle-s").length==0){
-     v_log=true
-  }
-
-  if ($("#d_tmp_nodet .ui-icon-circle-triangle-s").length==0){
-     v_nt=true
-  }
-      
-   nodet.set("nodes", "");
-   node_log.set("nodes", "");
-   
-
-    nodet.set("nodes", get2Object(new Request("/stat/node_stat", {})).node_stat.row)
-    node_log.set("nodes", get2Object(new Request("/stat/node_list", {})).node_list.row)
-  
-    update_common()
-    update_graph()
-
-    if (v_log){
-    	$("#d_tmp_node_log .ui-icon-circle-triangle-s").click()
-    }
-    if (v_nt){
-    	$("#d_tmp_nodet .ui-icon-circle-triangle-s").click();
-
-    }
-
-
-
-}, 6000);
 
 
 }
