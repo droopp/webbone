@@ -7244,7 +7244,7 @@ function executeApp(selected, modal, ok, deffered_call){
 				req.params.id = selected;
 				req.params.name = selected;
 				req.prefix = selected;
-				nw = window.open(conection_data.urlDb +'/#' + JSON.stringify(req), '_blank',
+				nw = window.open(conection_data.urlDb +'/#' + selected, '_blank',
 				 "width=1024,height=768,scrollbars=yes,toolbar=no,location=no,directories=no,status=no,menubar=no,resizable=no,copyhistory=no");
 				//nw.addToAppRequest(getAppModel(AppName));	
 				return;

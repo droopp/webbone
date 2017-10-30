@@ -1,10 +1,12 @@
 
 
-EditEnable=0
+EditEnable=0	
 
 if(getAppSettings("ppools")){
 
-//window.clearInterval(id); // will do nothing if no timeout with id is present
+try{
+	window.clearInterval(id); // will do nothing if no timeout with id is present
+}catch(e){}
 
 
 //menu
@@ -32,11 +34,7 @@ var o = newAppObject({
 var nodes = newAppObject({
                       nodes:"Workers: 0",
 					  cpu:"CPU: 0",
-					  ram:"RAM: 0",
-					  hdd:"HDD: 0",
-					  cpu_u:"CPU: 0",
-					  ram_u:"RAM: 0",
-					  hdd_u:"HDD: 0"
+					  ram:"RAM: 0"
 			})
 
 	
@@ -44,14 +42,14 @@ var nodet = newAppObject({
 	nodes:[]
 })
 
-nodet.set("nodes", get2Object(new Request("/stat/node_stat", {})).node_stat.row)
+nodet.set("ppools", get2Object(new Request("/stat/ppool_stat", {})).ppool_stat.row)
 
 
-var node_log = newAppObject({
+var ppool_log = newAppObject({
 	nodes:[]
 })
 
-node_log.set("nodes", get2Object(new Request("/stat/node_list", {})).node_list.row)
+ppool_log.set("ppools", get2Object(new Request("/stat/node_list", {})).node_list.row)
 
 
 
@@ -61,14 +59,10 @@ function update_common(){
 var common = {
 	nodes:0,
 	cpu:0,
-	ram:0,
-	hdd:0,
-	cpu_u:0,
-	ram_u:0,
-	hdd_u:0
+	ram:0
 }
 
-nd = nodet.get("nodes")
+nd = nodet.get("ppools")
 
 if (nd != undefined){
 
@@ -80,12 +74,8 @@ if (!$.isArray(nd)){
 
 nd.forEach(function(e){ 
 	common.nodes = common.nodes+1;
-	common.cpu = common.cpu + +e.cpu;
-	common.ram = common.ram	+ +e.ram;
-	common.hdd = common.hdd + +e.disk;
-	common.cpu_u = (common.cpu_u + +e.cpu_percent);
-	common.ram_u =common.ram_u + +e.ram_percent;
-	common.hdd_u = common.hdd_u + +e.disk_percent;
+	common.cpu = common.cpu + +e.cpu_percent;
+	common.ram = common.ram	+ +e.ram_percent/100* +e.ram;
 
 });
 	
@@ -94,12 +84,8 @@ nd.forEach(function(e){
 
 
 nodes.set({nodes:"Workers: " + common.nodes,
-		   cpu:"CPU: " + common.cpu,
-		   ram:"RAM: " + Math.round(common.ram/1024) + "G",
-		   hdd:"HDD: " + Math.round(common.hdd/1024) + "G",
-		   cpu_u:"CPU: " + check_nan(Math.round(common.cpu_u/common.nodes)) + "%",
-		   ram_u:"RAM: " + check_nan(Math.round(common.ram_u/common.nodes)) + "%",
-		   hdd_u:"HDD: " + check_nan(Math.round(common.hdd_u/common.nodes)) + "%"
+		   cpu:"CPU: " + common.cpu + "%",
+		   ram:"RAM: " + Math.round(common.ram) + "Mb"
 });
 
 }
@@ -110,32 +96,6 @@ function check_nan(v){
 	}else{
 		return v
 	}
-}
-
-
-//update graph
-
-function update_graph(){
-
-$("#d_graph").empty();
-
-nd = nodet.get("nodes")
-
-if (nd == undefined){
-	return
-}
-
-if (!$.isArray(nd)){
-	nd = [nd]
-}
-
-
-nd.forEach(function(e){ 
-	$("#d_graph").append("<img src='/rrd/drop--ppool_" + e.name + ".png?rand=" + Math.random() + "'></img>")
-
-});
-
-
 }
 
 
@@ -152,29 +112,74 @@ Render(new LabelView(o,"title"),"app");
 Render(new LabelView(nodes,"nodes"),"app");
 Render(new LabelView(nodes,"cpu"),"app");
 Render(new LabelView(nodes,"ram"),"app");
-Render(new LabelView(nodes,"hdd"),"app");
-
-
-//used resources
-//label dashboard
-//Render(new LabelView(o,"title2"),"app");
-
-Render(new LabelView(nodes,"cpu_u"),"app");
-Render(new LabelView(nodes,"ram_u"),"app");
-Render(new LabelView(nodes,"hdd_u"),"app");
-
 
 
 //node table
 Render(new LabelView(o,"graph"),"app");
 
 
-Render(new GridView(nodet,"nodet"),"app");
-Render(new GridView(node_log,"node_log"),"app");
+var NGridView = GridView.extend({
+	onDblClickRow: function(id){
+
+		data = $("#nodet").jqGrid('getRowData',id);
+
+		arr = data.name.split(":")
+
+
+
+		Question("<div id='app2' style='position:absolute; left:10px'><img src='/rrd/drop--ppool_"+arr.join("-") + data.node +".png?'></img></div>", 
+					function(){});
+
+		$(".ui-dialog").css("width","720px")
+		$(".ui-dialog").css("left","20px")
+		$(".ui-dialog").css("top","100px")
+		$("#d_question").css("height","220px")
+		
+	}
+
+});
+
+Render(new NGridView(nodet,"nodet"),"app");
+Render(new GridView(ppool_log,"node_log"),"app");
 
 update_common()
-update_graph()
 
+
+
+var id = window.setInterval(function(){
+
+
+  v_log=false
+  v_nt=false
+
+  if ($("#d_tmp_node_log .ui-icon-circle-triangle-s").length==0){
+     v_log=true
+  }
+
+  if ($("#d_tmp_nodet .ui-icon-circle-triangle-s").length==0){
+     v_nt=true
+  }
+      
+   nodet.set("ppools", "");
+   ppool_log.set("ppools", "");
+   
+
+    nodet.set("ppools", get2Object(new Request("/stat/ppool_stat", {})).ppool_stat.row)
+    ppool_log.set("ppools", get2Object(new Request("/stat/node_list", {})).node_list.row)
+  
+    update_common()
+
+    if (v_log){
+    	$("#d_tmp_node_log .ui-icon-circle-triangle-s").click()
+    }
+    if (v_nt){
+    	$("#d_tmp_nodet .ui-icon-circle-triangle-s").click();
+
+    }
+
+
+
+}, 10000);
 
 
 }

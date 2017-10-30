@@ -49,6 +49,45 @@ app.config['JWT_EXPIRATION_DELTA'] = timedelta(60)
 jwt = JWT(app, authenticate, identity)
 
 
+@app.route("/api/v1.0/stat/ppool_stat",  methods=['POST'])
+def ppool_stat():
+    con = sqlite3.connect(DB_NAME)
+
+    cur = con.cursor()
+
+    cur.execute("""select s.node, s.name, l.ram_count,
+                         s.date, AVG(s.count), AVG(s.cpu_percent),
+                         AVG(s.ram_percent)
+                         from ppool_stat s left join (select node, ram_count, MAX(date)
+                                                      from node_stat group by node) l
+                          on s.node = l.node
+                         where s.date > DATETIME('NOW', '-1 minutes')
+                         group by s.node, s.name
+                """)
+
+    res = "<root><ppool_stat>"
+    for row in cur:
+
+        if row[1] == 0:
+            continue
+
+        print(row)
+        res += """<row>
+                    <node>{}</node>
+                    <name>{}</name>
+                    <ram>{}</ram>
+                    <date>{}</date>
+                    <count>{}</count>
+                    <cpu_percent>{:2.1f}</cpu_percent>
+                    <ram_percent>{:2.1f}</ram_percent>
+                 </row>""".format(row[0], row[1], row[2], row[3], row[4], row[5],
+                                  row[6])
+
+    con.close()
+
+    return res + '</ppool_stat></root>', 200
+
+
 @app.route("/api/v1.0/stat/node_stat",  methods=['POST'])
 def node_stat():
     con = sqlite3.connect(DB_NAME)

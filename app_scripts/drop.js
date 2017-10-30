@@ -4,8 +4,9 @@ EditEnable=0
 
 if(getAppSettings("drop")){
 
-window.clearInterval(id); // will do nothing if no timeout with id is present
-
+try{
+	window.clearInterval(id); // will do nothing if no timeout with id is present
+}catch(e){}
 
 function mark_table(arr){
 
