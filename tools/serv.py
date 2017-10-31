@@ -75,11 +75,11 @@ def ppool_stat():
         res += """<row>
                     <node>{}</node>
                     <name>{}</name>
-                    <ram>{}</ram>
+                    <summa_ram>{}</summa_ram>
                     <date>{}</date>
-                    <count>{}</count>
-                    <cpu_percent>{:2.1f}</cpu_percent>
-                    <ram_percent>{:2.1f}</ram_percent>
+                    <summa_count>{}</summa_count>
+                    <summa_cpu_percent>{:2.1f}</summa_cpu_percent>
+                    <summa_ram_percent>{:2.1f}</summa_ram_percent>
                  </row>""".format(row[0], row[1], row[2], row[3], row[4], row[5],
                                   row[6])
 

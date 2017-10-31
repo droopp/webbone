@@ -5590,13 +5590,17 @@ if (v.groupname == "" || v.groupname == undefined){
  	mywidths=[];
  }
 
-  for(var key in v.values){
+
+  for(var key2 in v.values){
+
+  	 key = v.values[key2]
 
      if ($.inArray( key, v.values )!= -1){
 
-     v.values = $.grep(v.values, function(value) {
+     /*v.values = $.grep(v.values, function(value) {
  			 return value != key;
 			});
+	*/
 
 			if (mywidths[key]!="" || mywidths[key]!=undefined){
 				v_width = mywidths[key]
@@ -5616,7 +5620,8 @@ if (v.groupname == "" || v.groupname == undefined){
      }
    }
 
-  //fix null oracle value
+   if (mycolmodel.length != v.values.length){
+   	  //fix null oracle value
    for(var key in v.values){
 
    //fix for one column
@@ -5635,6 +5640,9 @@ if (v.groupname == "" || v.groupname == undefined){
            }
 
    }
+   }
+
+
 
  //add hidden columns
   for(var key in rowdata){

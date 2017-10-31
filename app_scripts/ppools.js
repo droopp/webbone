@@ -1,6 +1,6 @@
 
 
-EditEnable=0	
+EditEnable=0
 
 if(getAppSettings("ppools")){
 
@@ -33,6 +33,7 @@ var o = newAppObject({
 
 var nodes = newAppObject({
                       nodes:"Workers: 0",
+                      procs:"Procs: 0",
 					  cpu:"CPU: 0",
 					  ram:"RAM: 0"
 			})
@@ -58,6 +59,7 @@ function update_common(){
 //update common 
 var common = {
 	nodes:0,
+	procs:0,
 	cpu:0,
 	ram:0
 }
@@ -74,8 +76,9 @@ if (!$.isArray(nd)){
 
 nd.forEach(function(e){ 
 	common.nodes = common.nodes+1;
-	common.cpu = common.cpu + +e.cpu_percent;
-	common.ram = common.ram	+ +e.ram_percent/100* +e.ram;
+	common.procs = common.procs + +e.summa_count;
+	common.cpu = common.cpu + +e.summa_cpu_percent;
+	common.ram = common.ram	+ +e.summa_ram_percent/100* +e.summa_ram;
 
 });
 	
@@ -84,8 +87,9 @@ nd.forEach(function(e){
 
 
 nodes.set({nodes:"Workers: " + common.nodes,
+           procs:"Procs: " + common.procs,
 		   cpu:"CPU: " + common.cpu + "%",
-		   ram:"RAM: " + Math.round(common.ram) + "Mb"
+		   ram:"RAM: " + Math.round(common.ram/1024*100)/100 + "G"
 });
 
 }
@@ -110,6 +114,7 @@ Render(new LabelView(o,"title"),"app");
 
 //common
 Render(new LabelView(nodes,"nodes"),"app");
+Render(new LabelView(nodes,"procs"),"app");
 Render(new LabelView(nodes,"cpu"),"app");
 Render(new LabelView(nodes,"ram"),"app");
 
@@ -145,7 +150,7 @@ Render(new GridView(ppool_log,"node_log"),"app");
 update_common()
 
 
-
+/*
 var id = window.setInterval(function(){
 
 
@@ -180,7 +185,7 @@ var id = window.setInterval(function(){
 
 
 }, 10000);
-
+*/
 
 }
 
