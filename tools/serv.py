@@ -151,6 +151,44 @@ def node_list():
     return res + '</node_list></root>', 200
 
 
+@app.route("/api/v1.0/stat/ppool_list",  methods=['POST'])
+def ppool_list():
+    con = sqlite3.connect(DB_NAME)
+
+    cur = con.cursor()
+
+    cur.execute('''
+                select node, name, MAX(date), MAX(error), MAX(timeout),
+                       MAX(running), MAX(ok),
+                       round(MAX(elapsed)/1000,2),  round(AVG(elapsed)/1000,2)
+                from ppool_list
+                  --   where  date > DATETIME('NOW', '-1 minutes')
+                  --      and date < DATETIME('NOW')
+
+                group by node, name
+                ''')
+
+    res = "<root><ppool_list>"
+    for row in cur:
+        res += """<row>
+                    <node>{}</node>
+                    <name>{}</name>
+                    <date>{}</date>
+                    <summa_error>{}</summa_error>
+                    <summa_timeout>{}</summa_timeout>
+                    <summa_running>{}</summa_running>
+                    <summa_ok>{}</summa_ok>
+                    <elapsed>{}</elapsed>
+                    <elapsed_avg>{}</elapsed_avg>
+                 </row>""".format(row[0], row[1], row[2],
+                                  row[3], row[4], row[5],
+                                  row[6], row[7], row[8])
+
+    con.close()
+
+    return res + '</ppool_list></root>', 200
+
+
 @app.route("/api/v1.0/settings/save",  methods=['POST'])
 def save():
     con = sqlite3.connect('settings.db')

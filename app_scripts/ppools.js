@@ -40,19 +40,39 @@ var nodes = newAppObject({
 
 	
 var nodet = newAppObject({
-	nodes:[]
+	ppools:[]
 })
 
 nodet.set("ppools", get2Object(new Request("/stat/ppool_stat", {})).ppool_stat.row)
 
 
 var ppool_log = newAppObject({
-	nodes:[]
+	ppools:[]
 })
 
-ppool_log.set("ppools", get2Object(new Request("/stat/node_list", {})).node_list.row)
 
 
+ppool_log.set("ppools", get2Object(new Request("/stat/ppool_list", {})).ppool_list.row)
+
+
+function draw_time(app, data, cnt){
+
+$("#d_" + app).remove();
+
+var utils = $.pivotUtilities;
+var heatmap =  utils.renderers["Heatmap"];
+var sumOverSum =  utils.aggregators["average"];
+
+$.pivotUtilities.tipsData = data
+
+$("#d_" + app).pivot(
+  utils.tipsData, {
+    rows: ["node", "name"],
+    aggregator: sumOverSum([cnt]),
+    renderer: heatmap
+  });
+
+}
 
 function update_common(){
 
@@ -86,8 +106,8 @@ nd.forEach(function(e){
 
 
 
-nodes.set({nodes:"Workers: " + common.nodes,
-           procs:"Procs: " + common.procs,
+nodes.set({nodes:"Workers: " + Math.round(common.nodes),
+           procs:"Procs: " + Math.round(common.procs),
 		   cpu:"CPU: " + common.cpu + "%",
 		   ram:"RAM: " + Math.round(common.ram/1024*100)/100 + "G"
 });
@@ -147,8 +167,13 @@ var NGridView = GridView.extend({
 Render(new NGridView(nodet,"nodet"),"app");
 Render(new GridView(ppool_log,"node_log"),"app");
 
-update_common()
 
+//Render(new PivotView(ppool_log,"pivot"),"app");
+
+
+
+update_common()
+draw_time()
 
 /*
 var id = window.setInterval(function(){
@@ -170,7 +195,7 @@ var id = window.setInterval(function(){
    
 
     nodet.set("ppools", get2Object(new Request("/stat/ppool_stat", {})).ppool_stat.row)
-    ppool_log.set("ppools", get2Object(new Request("/stat/node_list", {})).node_list.row)
+    ppool_log.set("ppools", get2Object(new Request("/stat/ppool_list", {})).ppool_list.row)
   
     update_common()
 
@@ -185,7 +210,10 @@ var id = window.setInterval(function(){
 
 
 }, 10000);
+
 */
+
+
 
 }
 
