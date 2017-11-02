@@ -5736,7 +5736,7 @@ $("#" + v.view_id).jqGrid({
    		groupField :$.isArray(v.groupname)?v.groupname:[v.groupname],
         groupColumnShow : [true],
         groupText : ['<b>{0}</b>'],
-        groupCollapse : true,
+        groupCollapse : false,
         groupSummary : [true],
 		showSummaryOnHide: true
    	},

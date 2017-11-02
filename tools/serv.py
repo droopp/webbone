@@ -160,16 +160,19 @@ def ppool_list():
     cur.execute('''
                 select node, name, MAX(date), MAX(error), MAX(timeout),
                        MAX(running), MAX(ok),
-                       round(MAX(elapsed)/1000,2),  round(AVG(elapsed)/1000,2)
+                       round(MAX(elapsed)/1000,2),  round(AVG(elapsed)/1000,2),
+                       round(MAX(error) + MAX(timeout) + SUM(nomore),2),
+                       SUM(nomore)
                 from ppool_list
-                  --   where  date > DATETIME('NOW', '-1 minutes')
-                  --      and date < DATETIME('NOW')
+                     where  date > DATETIME('NOW', '-1 minutes')
+                        and date < DATETIME('NOW')
 
                 group by node, name
                 ''')
 
     res = "<root><ppool_list>"
     for row in cur:
+
         res += """<row>
                     <node>{}</node>
                     <name>{}</name>
@@ -180,9 +183,12 @@ def ppool_list():
                     <summa_ok>{}</summa_ok>
                     <elapsed>{}</elapsed>
                     <elapsed_avg>{}</elapsed_avg>
+                    <errors>{}</errors>
+                    <summa_nomore>{}</summa_nomore>
                  </row>""".format(row[0], row[1], row[2],
                                   row[3], row[4], row[5],
-                                  row[6], row[7], row[8])
+                                  row[6], row[7], row[8],
+                                  row[9], row[10])
 
     con.close()
 

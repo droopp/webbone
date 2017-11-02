@@ -1,5 +1,4 @@
 
-
 EditEnable=0
 
 if(getAppSettings("ppools")){
@@ -27,7 +26,9 @@ var o = newAppObject({
 					  desc:"Distributed Reliable Operations Platform",
 					  title:"Ppools resources",
 					  title2:"Used",
-					  graph: ""
+					  graph: "",
+					  graph_time:"Time ms",
+					  graph_error:"Err+TO+NoMore"
 					 });
 
 
@@ -55,15 +56,28 @@ var ppool_log = newAppObject({
 ppool_log.set("ppools", get2Object(new Request("/stat/ppool_list", {})).ppool_list.row)
 
 
-function draw_time(app, data, cnt){
+function draw_pivot(app, data, cnt){
 
-$("#d_" + app).remove();
+$("#d_" + app).empty();
+
+if (data == undefined){
+	
+	$("#d_" + app).append("no data..")
+	return
+
+}
+
+d = [["node","name",cnt]];
+
+data.forEach(function(e){
+	d.push([e.node, e.name, e[cnt]]);
+})
 
 var utils = $.pivotUtilities;
 var heatmap =  utils.renderers["Heatmap"];
 var sumOverSum =  utils.aggregators["average"];
 
-$.pivotUtilities.tipsData = data
+$.pivotUtilities.tipsData = d
 
 $("#d_" + app).pivot(
   utils.tipsData, {
@@ -141,7 +155,10 @@ Render(new LabelView(nodes,"ram"),"app");
 
 //node table
 Render(new LabelView(o,"graph"),"app");
+Render(new LabelView(o,"graph_time"),"app");
 
+Render(new LabelView(o,"graph2"),"app");
+Render(new LabelView(o,"graph_error"),"app");
 
 var NGridView = GridView.extend({
 	onDblClickRow: function(id){
@@ -173,9 +190,10 @@ Render(new GridView(ppool_log,"node_log"),"app");
 
 
 update_common()
-draw_time()
+draw_pivot("graph", ppool_log.get("ppools"), "elapsed");
+draw_pivot("graph2", ppool_log.get("ppools"), "errors");
 
-/*
+
 var id = window.setInterval(function(){
 
 
@@ -197,7 +215,9 @@ var id = window.setInterval(function(){
     nodet.set("ppools", get2Object(new Request("/stat/ppool_stat", {})).ppool_stat.row)
     ppool_log.set("ppools", get2Object(new Request("/stat/ppool_list", {})).ppool_list.row)
   
-    update_common()
+	update_common()
+	draw_pivot("graph", ppool_log.get("ppools"), "elapsed");
+	draw_pivot("graph2", ppool_log.get("ppools"), "errors");
 
     if (v_log){
     	$("#d_tmp_node_log .ui-icon-circle-triangle-s").click()
@@ -210,9 +230,6 @@ var id = window.setInterval(function(){
 
 
 }, 10000);
-
-*/
-
 
 
 }
