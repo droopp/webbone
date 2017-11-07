@@ -68,10 +68,10 @@ def ppool_stat():
     res = "<root><ppool_stat>"
     for row in cur:
 
-        if row[1] == 0:
-            continue
+        # if row[1] == 0:
+        #     continue
 
-        print(row)
+        # print(row)
         res += """<row>
                     <node>{}</node>
                     <name>{}</name>
@@ -106,10 +106,10 @@ def node_stat():
     res = "<root><node_stat>"
     for row in cur:
 
-        if row[1] == 0:
-            continue
+        # if row[1] == 0:
+        #     continue
 
-        print(row)
+        # print(row)
         res += """<row>
                     <name>{}</name>
                     <is_active>{}</is_active>

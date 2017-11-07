@@ -90,7 +90,7 @@ var NGridView = GridView.extend({
 
 });
 
-Render(new NGridView(ppool_log,"node_log"),"app");
+Render(new NGridView(ppool_log,"flow_log2"),"app");
 //Render(new GridView(ppool_log,"node_log"),"app");
 
 
@@ -144,7 +144,7 @@ var g = new Graph();
     
     /* add an unknown node implicitly by adding an edge */
     g.addEdge("strawberry", "apple", { directed : true });
-    g.addEdge("apple","id35", { directed : true });
+    g.addEdge("apple","id35", { directed : true  });
 
     g.addEdge("id34", "id35");
     g.addEdge("id35", "strawberry", { directed : true });
