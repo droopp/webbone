@@ -208,13 +208,16 @@ var id = window.setInterval(function(){
      v_nt=true
   }
       
-   nodet.set("ppools", "");
-   ppool_log.set("ppools", "");
+
+   if (!(v_nt || v_log)){     
+   	nodet.set("ppools", "");
+   	ppool_log.set("ppools", "");
    
 
     nodet.set("ppools", get2Object(new Request("/stat/ppool_stat", {})).ppool_stat.row)
     ppool_log.set("ppools", get2Object(new Request("/stat/ppool_list", {})).ppool_list.row)
   
+   }
 	update_common()
 	draw_pivot("graph", ppool_log.get("ppools"), "elapsed");
 	draw_pivot("graph2", ppool_log.get("ppools"), "errors");
@@ -229,7 +232,7 @@ var id = window.setInterval(function(){
 
 
 
-}, 10000);
+}, 6000);
 
 
 }
