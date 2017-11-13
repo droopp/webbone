@@ -3,6 +3,8 @@ from flask import request
 
 import sqlite3
 import os
+import glob
+import json
 
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
@@ -23,6 +25,7 @@ users = [
 ]
 
 DB_NAME = os.environ["DB_NAME"]
+SCENE_DIR = os.environ["SCENE_DIR"]
 
 username_table = {u.username: u for u in users}
 userid_table = {u.id: u for u in users}
@@ -47,6 +50,31 @@ app.config['SECRET_KEY'] = 'super-secret'
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(60)
 
 jwt = JWT(app, authenticate, identity)
+
+
+@app.route("/api/v1.0/stat/flows",  methods=['POST'])
+def flows():
+
+    l = glob.glob(SCENE_DIR + "/*.json")
+
+    data = []
+    for i in l:
+        with open(i) as f:
+            data.append(json.loads(f.read()))
+
+    res = "<root><flows>"
+
+    for row in data:
+        res += """<row>
+                    <name>{}</name>
+                    <active>{}</active>
+                    <date>{}</date>
+                    <entry>{}</entry>
+                    <data>{}</data>
+                 </row>""".format(row["name"], row["active"], row["date"],
+                                  row["entry_ppool"], json.dumps(row))
+
+    return res + '</flows></root>', 200
 
 
 @app.route("/api/v1.0/stat/ppool_stat",  methods=['POST'])

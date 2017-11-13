@@ -43,7 +43,7 @@ var ppool_log = newAppObject({
 
 
 
-ppool_log.set("ppools", get2Object(new Request("/stat/ppool_list", {})).ppool_list.row)
+ppool_log.set("ppools", get2Object(new Request("/stat/flows", {})).flows.row)
 
 
 
@@ -72,13 +72,9 @@ Render(new LabelView(o,"title"),"app");
 var NGridView = GridView.extend({
 	onDblClickRow: function(id){
 
-		data = $("#node_log").jqGrid('getRowData',id);
+		data = $("#flow_log2").jqGrid('getRowData',id);
 
-		arr = data.name.split(":")
-
-
-
-		Question("<div id='app2' style='position:absolute; left:10px'><img src='/rrd/drop--ppool_"+arr.join("-") + data.node +".png?'></img></div>", 
+		Question("<div id='app2' style='position:absolute; left:10px'><pre>"+ JSON.stringify(JSON.parse(data.data), null, 4) +"</pre></div>", 
 					function(){});
 
 		$(".ui-dialog").css("width","720px")
@@ -95,7 +91,7 @@ Render(new NGridView(ppool_log,"flow_log2"),"app");
 
 
 //node table
-//Render(new LabelView(o,"graph"),"app");
+Render(new LabelView(o,"graph"),"app");
 //draw_flow()
 
 
