@@ -19,8 +19,8 @@ try{
      params:{
 			id:"app_menu",
 			view_id:"app_menu",
-			values:["drop", "ppools", "flows", "images", "settings"],
-			labels:["drop", "ppools", "flows", "images", "settings"]
+			values:["drop", "ppools", "flows"],
+			labels:["drop", "ppools", "flows"]
     	}
 	};
 
