@@ -47,6 +47,14 @@ ppool_log.set("ppools", get2Object(new Request("/stat/flows", {})).flows.row)
 
 
 
+var flow_log = newAppObject({
+	flows:[]
+})
+
+
+//flow_log.set("ppools", get2Object(new Request("/stat/flow_log", {})).flows.row)
+
+
 	
 
 function check_nan(v){
@@ -82,12 +90,56 @@ var NGridView = GridView.extend({
 		$(".ui-dialog").css("top","100px")
 		$("#d_question").css("height","220px")
 		
+	},
+
+	onClickRow: function(id){
+
+		$("#d_graph").empty()
+
+		data = $("#flow_log2").jqGrid('getRowData',id);
+
+		d = JSON.parse(data.data)
+		tmp = {}
+		d.scenes.forEach(function(e){ 
+			if (e.name == d.start_scene){
+				tmp = e
+				}
+		})
+
+		var g = new Graph();
+
+		tmp.cook.forEach(function(e){
+
+			cmds = e.cmd.split("::");
+
+			//console.log(cmds);
+
+			if (cmds[2] == "start_pool"){
+				 g.addNode(cmds[3]);
+			}
+			if (cmds[2] == "subscribe"){
+				 g.addEdge(cmds[3], cmds[4], { directed : true} );
+			}
+
+		})
+
+					    /* layout the graph using the Spring layout implementation */
+				var layouter = new Graph.Layout.Spring(g);
+				layouter.layout();
+
+				/* draw the graph using the RaphaelJS draw implementation */
+				var renderer = new Graph.Renderer.Raphael('d_graph', g, 700, 300);
+				renderer.draw();
+		
 	}
+
+
+
 
 });
 
 Render(new NGridView(ppool_log,"flow_log2"),"app");
-//Render(new GridView(ppool_log,"node_log"),"app");
+Render(new GridView(flow_log, "flow_log3"),"app");
 
 
 //node table
