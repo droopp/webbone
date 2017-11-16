@@ -69,10 +69,12 @@ def flows():
                     <name>{}</name>
                     <active>{}</active>
                     <version>{}</version>
+                    <priority>{}</priority>
                     <entry>{}</entry>
                     <data>{}</data>
                  </row>""".format(row["name"], row["active"], row["version"],
-                                  row["entry_ppool"], json.dumps(row))
+                                  row["priority"],
+                                  row["entry_ppool"],  json.dumps(row))
 
     return res + '</flows></root>', 200
 
