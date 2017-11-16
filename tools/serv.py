@@ -6,7 +6,7 @@ import os
 import glob
 import json
 
-from flask_jwt import JWT, jwt_required, current_identity
+from flask_jwt import JWT, jwt_required  # , current_identity
 from werkzeug.security import safe_str_cmp
 from datetime import timedelta
 
@@ -25,7 +25,7 @@ users = [
 ]
 
 DB_NAME = os.environ["DB_NAME"]
-SCENE_DIR = os.environ["SCENE_DIR"]
+FLOWS_DIR = os.environ["FLOWS_DIR"]
 
 username_table = {u.username: u for u in users}
 userid_table = {u.id: u for u in users}
@@ -55,7 +55,7 @@ jwt = JWT(app, authenticate, identity)
 @app.route("/api/v1.0/stat/flows",  methods=['POST'])
 def flows():
 
-    l = glob.glob(SCENE_DIR + "/*.json")
+    l = glob.glob(FLOWS_DIR + "/*.json")
 
     data = []
     for i in l:
@@ -68,10 +68,10 @@ def flows():
         res += """<row>
                     <name>{}</name>
                     <active>{}</active>
-                    <date>{}</date>
+                    <version>{}</version>
                     <entry>{}</entry>
                     <data>{}</data>
-                 </row>""".format(row["name"], row["active"], row["date"],
+                 </row>""".format(row["name"], row["active"], row["version"],
                                   row["entry_ppool"], json.dumps(row))
 
     return res + '</flows></root>', 200
