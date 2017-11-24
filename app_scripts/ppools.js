@@ -122,7 +122,7 @@ nd.forEach(function(e){
 
 nodes.set({nodes:"Workers: " + Math.round(common.nodes),
            procs:"Procs: " + Math.round(common.procs),
-		   cpu:"CPU: " + common.cpu + "%",
+		   cpu:"CPU: " + Math.round(common.cpu) + "%",
 		   ram:"RAM: " + Math.round(common.ram/1024*100)/100 + "G"
 });
 
