@@ -105,12 +105,12 @@ def ppool_stat():
         res += """<row>
                     <node>{}</node>
                     <name>{}</name>
-                    <summa_ram>{}</summa_ram>
+                    <summa_ram>{:2.1f}</summa_ram>
                     <date>{}</date>
                     <summa_count>{}</summa_count>
                     <summa_cpu_percent>{:2.1f}</summa_cpu_percent>
                     <summa_ram_percent>{:2.1f}</summa_ram_percent>
-                 </row>""".format(row[0], row[1], row[2], row[3], row[4], row[5],
+                 </row>""".format(row[0], row[1], row[2]*row[6]/100, row[3], row[4], row[5],
                                   row[6])
 
     con.close()
@@ -189,7 +189,7 @@ def ppool_list():
 
     cur.execute('''
                 select node, name, MAX(date), MAX(error), MAX(timeout),
-                       MAX(running), MAX(ok),
+                       MIN(running), MAX(ok),
                        round(MAX(elapsed)/1000,2),  round(AVG(elapsed)/1000,2),
                        round(MAX(error) + MAX(timeout) + SUM(nomore),2),
                        SUM(nomore)
