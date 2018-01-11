@@ -20,7 +20,7 @@ try{
 			id:"app_menu",
 			view_id:"app_menu",
 			values:["drop", "ppools", "flows"],
-			labels:["drop", "ppools", "flows"]
+			labels:["nodes", "ppools", "flows"]
     	}
 	};
 
@@ -139,7 +139,7 @@ var NGridView = GridView.extend({
 });
 
 Render(new NGridView(ppool_log,"flow_log2"),"app");
-Render(new GridView(flow_log, "flow_log3"),"app");
+//Render(new GridView(flow_log, "flow_log3"),"app");
 
 
 //node table

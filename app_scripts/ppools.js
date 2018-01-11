@@ -15,7 +15,7 @@ try{
 			id:"app_menu",
 			view_id:"app_menu",
 			values:["drop", "ppools", "flows"],
-			labels:["drop", "ppools", "flows"]
+			labels:["nodes", "ppools", "flows"]
     	}
 	};
 
