@@ -15,3 +15,7 @@ start:
 webbone.conf
    /  - > root html dir
 
+./js/json2db.js
+  url -> hostname 
+
+
