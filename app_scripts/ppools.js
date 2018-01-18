@@ -92,6 +92,7 @@ function update_common(){
 
 //update common 
 var common = {
+    node0:0.001,
 	nodes:0,
 	procs:0,
 	cpu:0,
@@ -107,22 +108,28 @@ if (!$.isArray(nd)){
 }
 
 
+d2 = {}
 
 nd.forEach(function(e){ 
+    d2[e.node] = 1
 	common.nodes = common.nodes+1;
 	common.procs = common.procs + +e.summa_count;
 	common.cpu = common.cpu + +e.summa_cpu_percent;
 	common.ram = common.ram	+ +e.summa_ram_percent/100* +e.summa_ram;
 
 });
+
+for (i in d2){
+  common.node0 = common.node0 + 1
+}
+
 	
 }
 
 
-
 nodes.set({nodes:"Workers: " + Math.round(common.nodes),
            procs:"Procs: " + Math.round(common.procs),
-		   cpu:"CPU: " + Math.round(common.cpu) + "%",
+		   cpu:"CPU: " + Math.round(common.cpu/common.node0) + "%",
 		   ram:"RAM: " + Math.round(common.ram/1024*100)/100 + "G"
 });
 
