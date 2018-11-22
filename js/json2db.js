@@ -100,7 +100,7 @@ function get2Object(o) {
     						xhr.setRequestHeader ("Authorization", "JWT " + getCookie("access_token"));
 						},
 						type:"POST",
-						url:conection_data.urlDb +  "/api/v1.0" + o.root.name,
+						url:conection_data.urlDb +  "/api/v1" + o.root.name,
 						data:xml2,
 						async:v_async,
 						contentType:"text/plain; charset=utf-8",

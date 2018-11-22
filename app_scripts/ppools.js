@@ -188,6 +188,31 @@ var NGridView = GridView.extend({
 
 });
 
+
+var GridView = GridView.extend({
+	onDblClickRow: function(id){
+
+		data = $("#node_log").jqGrid('getRowData',id);
+		ip = data.node.split("@")[1]
+		name = data.name
+
+		arr = get2Mongo("/api/v1.0/stats/logs/" + ip + "/" + name, {}).responseJSON;
+
+		
+		Question("<div id='app2' style='position:absolute; left:10px'>" + arr.text + "</div>", 
+					function(){});
+
+		$(".ui-dialog").css("width","720px")
+		$(".ui-dialog").css("left","20px")
+		$(".ui-dialog").css("top","100px")
+		$("#d_question").css("height","220px")
+		
+	}
+
+});
+
+
+
 Render(new NGridView(nodet,"nodet"),"app");
 Render(new GridView(ppool_log,"node_log"),"app");
 
@@ -240,7 +265,6 @@ var id = window.setInterval(function(){
 
 
 }, 6000);
-
 
 }
 

@@ -52,7 +52,7 @@ app.config['JWT_EXPIRATION_DELTA'] = timedelta(60)
 jwt = JWT(app, authenticate, identity)
 
 
-@app.route("/api/v1.0/stat/flows",  methods=['POST'])
+@app.route("/api/v1/stat/flows",  methods=['POST'])
 def flows():
 
     l = glob.glob(FLOWS_DIR + "/*.json")
@@ -79,7 +79,7 @@ def flows():
     return res + '</flows></root>', 200
 
 
-@app.route("/api/v1.0/stat/ppool_stat",  methods=['POST'])
+@app.route("/api/v1/stat/ppool_stat",  methods=['POST'])
 def ppool_stat():
     con = sqlite3.connect(DB_NAME)
 
@@ -118,7 +118,7 @@ def ppool_stat():
     return res + '</ppool_stat></root>', 200
 
 
-@app.route("/api/v1.0/stat/node_stat",  methods=['POST'])
+@app.route("/api/v1/stat/node_stat",  methods=['POST'])
 def node_stat():
     con = sqlite3.connect(DB_NAME)
 
@@ -159,7 +159,7 @@ def node_stat():
     return res + '</node_stat></root>', 200
 
 
-@app.route("/api/v1.0/stat/node_list",  methods=['POST'])
+@app.route("/api/v1/stat/node_list",  methods=['POST'])
 def node_list():
     con = sqlite3.connect(DB_NAME)
 
@@ -181,7 +181,7 @@ def node_list():
     return res + '</node_list></root>', 200
 
 
-@app.route("/api/v1.0/stat/ppool_list",  methods=['POST'])
+@app.route("/api/v1/stat/ppool_list",  methods=['POST'])
 def ppool_list():
     con = sqlite3.connect(DB_NAME)
 
@@ -225,7 +225,7 @@ def ppool_list():
     return res + '</ppool_list></root>', 200
 
 
-@app.route("/api/v1.0/settings/save",  methods=['POST'])
+@app.route("/api/v1/settings/save",  methods=['POST'])
 def save():
     con = sqlite3.connect('settings.db')
 
@@ -254,7 +254,7 @@ def save():
     return '<sucsess>ok</sucsess>', 200
 
 
-@app.route("/api/v1.0/settings/get",  methods=['POST'])
+@app.route("/api/v1/settings/get",  methods=['POST'])
 @jwt_required()
 def get():
 
