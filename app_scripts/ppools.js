@@ -196,7 +196,7 @@ var GridView = GridView.extend({
 		ip = data.node.split("@")[1]
 		name = data.name
 
-		arr = get2Mongo("/api/v1.0/stats/logs/" + ip + "/" + name, {}).responseJSON;
+		arr = get2Mongo("/api/v1/stats/logs/" + ip + "/" + name, {}).responseJSON;
 
 		
 		Question("<div id='app2' style='position:absolute; left:10px'>" + arr.text + "</div>", 
