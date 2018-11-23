@@ -115,7 +115,7 @@ nd.forEach(function(e){
 	common.nodes = common.nodes+1;
 	common.procs = common.procs + +e.summa_count;
 	common.cpu = common.cpu + +e.summa_cpu_percent;
-	common.ram = common.ram	+ +e.summa_ram_percent/100* +e.summa_ram;
+	common.ram = common.ram	+ +e.summa_ram;
 
 });
 
