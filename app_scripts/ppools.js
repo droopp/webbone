@@ -264,7 +264,7 @@ var id = window.setInterval(function(){
 
 
 
-}, 6000);
+}, 10000);
 
 }
 
