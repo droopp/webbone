@@ -10,6 +10,9 @@ from flask_jwt import JWT, jwt_required  # , current_identity
 from werkzeug.security import safe_str_cmp
 from datetime import timedelta
 
+import rrdtool
+import base64
+
 
 class User(object):
     def __init__(self, id, username, password):
@@ -179,6 +182,30 @@ def node_list():
     con.close()
 
     return res + '</node_list></root>', 200
+
+
+@app.route("/api/v1/stat/graph/<node>/<name>",  methods=['POST'])
+def get_rrd_graph(name, node):
+
+    _COLORS = ["#FF1100", "#87dd7d", "#5978ea"]
+    _name = "/tmp/drop--{}{}".format(name, node)
+    df = []
+    line = []
+    i = 0
+
+    for k in rrdtool.info(_name + ".rrd").iterkeys():
+        if ".last_ds" in k:
+            x = k[3:-9]
+            df.append("DEF:{1}={0}.rrd:{1}:AVERAGE".format(_name, x))
+            line.append("LINE2:{0}{2}:{1}".format(x, x, _COLORS[i]))
+            i += 1
+
+    rrdtool.graph("{}.png".format(_name), "-t {}".format(name + node),
+                  "--start", "-300s", "-w 570", "-h 120",  df, line)
+
+    with open("{}.png".format(_name)) as f:
+        img = base64.b64encode(f.read())
+        return "<root><img>" + img + "</img></root>", 200
 
 
 @app.route("/api/v1/stat/ppool_list",  methods=['POST'])
