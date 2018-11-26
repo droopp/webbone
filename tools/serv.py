@@ -28,7 +28,7 @@ users = [
 ]
 
 DB_NAME = os.environ["DB_NAME"]
-FLOWS_DIR = os.environ["FLOWS_DIR"]
+DROP_DIR = os.environ["DROP_DIR"]
 
 username_table = {u.username: u for u in users}
 userid_table = {u.id: u for u in users}
@@ -58,7 +58,7 @@ jwt = JWT(app, authenticate, identity)
 @app.route("/api/v1/stat/flows",  methods=['POST'])
 def flows():
 
-    l = glob.glob(FLOWS_DIR + "/*.json")
+    l = glob.glob(DROP_DIR + "/flows/*.json")
 
     data = []
     for i in l:
@@ -188,7 +188,7 @@ def node_list():
 def get_rrd_graph(name, node):
 
     _COLORS = ["#FF1100", "#87dd7d", "#5978ea"]
-    _name = "/tmp/drop--{}{}".format(name, node)
+    _name = "{}/drop--{}{}".format(DROP_DIR + "/rrd", name, node)
     df = []
     line = []
     i = 0
