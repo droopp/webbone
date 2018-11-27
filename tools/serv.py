@@ -184,8 +184,8 @@ def node_list():
     return res + '</node_list></root>', 200
 
 
-@app.route("/api/v1/stat/graph/<node>/<name>",  methods=['POST'])
-def get_rrd_graph(name, node):
+@app.route("/api/v1/stat/graph/<node>/<name>/<interval>",  methods=['POST'])
+def get_rrd_graph(name, node, interval):
 
     _COLORS = ["#FF1100", "#87dd7d", "#5978ea"]
     _name = "{}/drop--{}{}".format(DROP_DIR + "/rrd", name, node)
@@ -201,11 +201,11 @@ def get_rrd_graph(name, node):
             i += 1
 
     rrdtool.graph("{}.png".format(_name), "-t {}".format(name + node),
-                  "--start", "-300s", "-w 570", "-h 120",  df, line)
+                  "--start", "-{}s".format(interval), "-w 570", "-h 120",  df, line)
 
     with open("{}.png".format(_name)) as f:
         img = base64.b64encode(f.read())
-        return "<root><img>" + img + "</img></root>", 200
+        return json.dumps({"img": img}), 200
 
 
 @app.route("/api/v1/stat/ppool_list",  methods=['POST'])

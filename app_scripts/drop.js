@@ -190,14 +190,34 @@ Render(new LabelView(nodes,"hdd_u"),"app");
 //node table
 Render(new LabelView(o,"graph"),"app");
 
+var NGridView = GridView.extend({
+	onDblClickRow: function(id){
 
-Render(new GridView(nodet,"nodet"),"app");
+		data = $("#nodet").jqGrid('getRowData',id);
+
+		img = get2Mongo("/api/v1/stat/graph/" + data.name + "/node_/300", {}).responseJSON	
+		Question("<div id='app2' style='position:absolute; left:10px'><img src='data:image/png;base64, " + img.img + "'></img></div>", 
+					function(){});
+
+		
+
+		$(".ui-dialog").css("width","720px")
+		$(".ui-dialog").css("left","20px")
+		$(".ui-dialog").css("top","100px")
+		$("#d_question").css("height","220px")
+		
+	}
+
+});
+
+
+Render(new NGridView(nodet,"nodet"),"app");
 Render(new GridView(node_log,"node_log"),"app");
 
 update_common()
-update_graph()
+//update_graph()
 
-
+$("#d_tmp_nodet .ui-icon-circle-triangle-s").click();
 var id = window.setInterval(function(){
 
 
@@ -220,7 +240,7 @@ var id = window.setInterval(function(){
     node_log.set("nodes", get2Object(new Request("/stat/node_list", {})).node_list.row)
   
     update_common()
-    update_graph()
+    //update_graph()
 
     if (v_log){
     	$("#d_tmp_node_log .ui-icon-circle-triangle-s").click()

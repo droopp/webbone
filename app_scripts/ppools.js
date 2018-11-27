@@ -171,12 +171,10 @@ var NGridView = GridView.extend({
 	onDblClickRow: function(id){
 
 		data = $("#nodet").jqGrid('getRowData',id);
-
 		arr = data.name.split(":")
 
-
-
-		Question("<div id='app2' style='position:absolute; left:10px'><img src='/rrd/drop--ppool_"+arr.join("-") + data.node +".png?'></img></div>", 
+		img = get2Mongo("/api/v1/stat/graph/" + data.node + "/ppool_" + arr.join("-") + "/300", {}).responseJSON	
+		Question("<div id='app2' style='position:absolute; left:10px'><img src='data:image/png;base64, " + img.img + "'></img></div>", 
 					function(){});
 
 		$(".ui-dialog").css("width","720px")
