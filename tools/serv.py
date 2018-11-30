@@ -94,7 +94,7 @@ def ppool_stat():
                          from ppool_stat s left join (select node, ram_count, MAX(date)
                                                       from node_stat group by node) l
                           on s.node = l.node
-                         where s.date > DATETIME('NOW', '-1 minutes')
+                         where s.date > DATETIME('NOW', '-15 seconds')
                          group by s.node, s.name
                 """)
 
@@ -132,7 +132,7 @@ def node_stat():
                          AVG(s.ram_percent), AVG(s.disk_percent), AVG(s.net_count)
                          from node_stat s left join (select node, active, MAX(date) from node_list) l
                           on s.node = l.node
-                         where s.date > DATETIME('NOW', '-1 minutes')
+                         where s.date > DATETIME('NOW', '-15 seconds')
                          group by s.node
                 """)
 
@@ -221,7 +221,7 @@ def ppool_list():
                        round(MAX(error) + MAX(timeout) + SUM(nomore),2),
                        SUM(nomore)
                 from ppool_list
-                     where  date > DATETIME('NOW', '-1 minutes')
+                     where  date > DATETIME('NOW', '-15 seconds')
                         and date < DATETIME('NOW')
 
                 group by node, name
